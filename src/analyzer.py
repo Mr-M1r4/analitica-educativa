@@ -18,10 +18,10 @@ def metricas_generales(df_estudiantes: pd.DataFrame, df_academico: pd.DataFrame)
         Diccionario con métricas clave
     """
     total_estudiantes = len(df_estudiantes)
-    total_asignaturas = df_academico["id_asignatura"].nunique()
-    tasa_aprobacion = (df_academico["aprobado"].sum() / len(df_academico) * 100).round(2)
-    tasa_desercion = (df_academico["deserto"].sum() / len(df_academico) * 100).round(2)
-    promedio_general = df_academico["calificacion"].mean().round(2)
+    total_asignaturas = df_academico["nombre_asignatura"].nunique() if "nombre_asignatura" in df_academico.columns else df_academico.shape[1]
+    tasa_aprobacion = (df_academico["aprobado"].sum() / len(df_academico) * 100).round(2) if "aprobado" in df_academico.columns else 0
+    tasa_desercion = (df_academico["deserto"].sum() / len(df_academico) * 100).round(2) if "deserto" in df_academico.columns else 0
+    promedio_general = df_academico["calificacion"].mean().round(2) if "calificacion" in df_academico.columns else 0
     
     return {
         "total_estudiantes": total_estudiantes,

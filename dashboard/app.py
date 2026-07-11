@@ -28,34 +28,17 @@ st.title("🎓 Panel de Analítica Educativa")
 st.markdown("---")
 
 @st.cache_data
-def cargar_datos_demo():
-    np.random.seed(42)
-    n_estudiantes = 500
-    n_registros = 2000
-    asignaturas = ['Matemáticas', 'Física', 'Química', 'Programación', 'Base de Datos', 'Redes']
+def cargar_datos_reales():
+    """Carga datos reales desde CSV."""
+    data_dir = Path(__file__).parent.parent / "data" / "raw"
     
-    df_estudiantes = pd.DataFrame({
-        'id_estudiante': range(1, n_estudiantes + 1),
-        'genero': np.random.choice(['M', 'F'], n_estudiantes),
-        'edad': np.random.randint(16, 30, n_estudiantes),
-        'estado_civil': np.random.choice(['Soltero', 'Casado'], n_estudiantes, p=[0.7, 0.3]),
-        'becado': np.random.choice([True, False], n_estudiantes, p=[0.3, 0.7])
-    })
+    df_estudiantes = pd.read_csv(data_dir / "estudiantes.csv")
+    df_academico = pd.read_csv(data_dir / "rendimiento_academico.csv")
     
-    df_academico = pd.DataFrame({
-        'id_estudiante': np.random.choice(range(1, n_estudiantes + 1), n_registros),
-        'semestre': np.random.choice(['2023-1', '2023-2', '2024-1', '2024-2'], n_registros),
-        'ano_academico': np.random.choice([2023, 2024], n_registros),
-        'nombre_asignatura': np.random.choice(asignaturas, n_registros),
-        'creditos': np.random.choice([3, 4, 5], n_registros),
-        'calificacion': np.random.normal(72, 15, n_registros).clip(0, 100).round(1),
-        'aprobado': np.random.choice([True, False], n_registros, p=[0.7, 0.3]),
-        'deserto': np.random.choice([True, False], n_registros, p=[0.15, 0.85])
-    })
     return df_estudiantes, df_academico
 
 def main():
-    df_estudiantes, df_academico = cargar_datos_demo()
+    df_estudiantes, df_academico = cargar_datos_reales()
     
     st.sidebar.header("Filtros")
     semestre_seleccionado = st.sidebar.selectbox("Semestre", ['Todos'] + list(df_academico['semestre'].unique()))
